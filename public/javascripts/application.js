@@ -1,7 +1,19 @@
-// Put your application scripts here
+function getParameterByName(name)
+{
+  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+  var regexS = "[\\?&]" + name + "=([^&#]*)";
+  var regex = new RegExp(regexS);
+  var results = regex.exec(window.location.search);
+  if(results == null)
+    return "";
+  else
+    return decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
 $(function(){
 
 	function search() {
+		history.pushState(null, $("ul.inputs li").map(function(idx,el){return $(el).text()}).toArray().join("+"), "/?words=" +$("ul.inputs li").map(function(idx,el){return $(el).text()}).toArray().join("+"));
 		$.ajax("/synonym/" + $("ul.inputs li").map(function(idx,el){return $(el).text()}).toArray().join("+"),{
 			success: function(synonyms) {
 				$("ul.synonyms li").remove();
@@ -36,6 +48,15 @@ $(function(){
 			$("hr").hide();
 		}
 	}
+
+	$.each(getParameterByName("words").split(" "), function(idx,word) {
+		addInput(word);
+	});
+
+	if(getParameterByName("words").length > 0) {
+		search();
+		hideOrShowHR();
+	} 
 
 	$("form").on("submit", function(e) {
 		e.preventDefault();
