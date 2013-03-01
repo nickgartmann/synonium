@@ -1,0 +1,59 @@
+$font: 'Petrona', Georgia, 'Times New Roman', Serif
+
+.content
+	text-align: center
+	padding-top: 40px
+	color: #222
+
+	.logo 
+		font-family: $font
+		font-size: 56px
+		margin: 0
+		padding: 0
+		margin-bottom: -12px
+
+	.tagline
+		font-family: $font
+		font-size: 24px
+		padding: 0
+		color: #222
+
+
+	input
+		font-family: Georgia
+		width: 40%
+		padding: 8px
+		border-radius: 5px
+		border: 1px solid #222
+		font-size: 20px
+
+	hr
+		width: 40%
+		display: none
+
+	ul
+		list-style: none
+		margin: 0
+		padding: 0
+		margin-top: 8px
+		width: 40%
+		margin-left: auto
+		margin-right: auto
+
+		li
+			margin: 0
+			padding: 0
+			display: inline
+			font-family: $font
+			font-size: 24px
+
+		li:hover
+			cursor: pointer
+			color: #A22
+			text-decoration: underline
+
+		li:after
+			content: ", "
+
+		li:last-child:after
+			content: ""
