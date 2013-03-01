@@ -12,7 +12,10 @@
     font-family: "Petrona", Georgia, "Times New Roman", Serif;
     font-size: 24px;
     padding: 0;
-    color: #222222; }
+    color: #222222;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto; }
   .content input {
     font-family: Georgia;
     width: 40%;
