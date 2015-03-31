@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Synonium - A symposium of synonyms</title>
+    <script src="js/application.js"></script>
+    <script src="http://underscorejs.org/underscore-min.js"></script>
+    <link href="http://fonts.googleapis.com/css?family=Petrona" rel="StyleSheet" type="text/css">
+    <link href="css/application.css" rel="StyleSheet" type="text/css">
+  </head>
+  <body>
+    <a href="/" title="Start over">
+      <div id="logo"></div>
+      <h1>synonium</h1>
+    </a>
+    <h2 class="tagline">- A symposium of synonyms -</h2>
+    <div id="content">
+      <p>
+        Find the intersection of the synonyms<br />
+        of multiple words. 
+      </p>
+      <form id="search" action="#">
+        <input type="text" id="word-search" placeholder="Type a word here, then press enter" />
+      </form>
+      <ul id='current-words' class="word-list"></ul>
+      <ul id='current-synonyms' class="word-list"></ul>
+      </ul>
+    </div>
+  </body>
+</html>

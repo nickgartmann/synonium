@@ -1,0 +1,114 @@
+body {
+  font-family: 'Petrona', 'Georgia', 'Serif';
+  color: #222;
+  text-align: center;
+  padding-top: 30px;
+}
+
+a {
+  color: #222;
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 40px;
+  margin: 20px 0 0 0;
+  padding: 0px;
+}
+
+#content {
+  width: 460px;
+  text-align: center;
+  margin: auto;
+  font-size: 22px;
+}
+
+.tagline {
+  font-style: italic;
+  font-size: 24px;
+  margin: 5px 0 0 0;
+  padding: 0px;
+}
+
+#logo {
+  width: 25px;
+  height: 25px;
+  background: #e31b23;
+  opacity: 0.6;
+  border-radius: 50%;
+  margin: auto;
+  position: relative;
+  right: 10px;
+}
+#logo::before {
+  content: ' ';
+  display: block;
+  width: 25px;
+  height: 25px;
+  background: #00467f;
+  border-radius: 50%;
+  position: relative;
+  left: 15px;
+  opacity: 0.85;
+  margin-right: -25px;
+  margin-bottom: -25px;
+}
+#logo::after {
+  content: ' ';
+  display: block;
+  height: 25px;
+  width: 25px;
+  background: #e7a614;
+  border-radius: 50%;
+  position: relative;
+  left: 8px;
+  top: 15px;
+  opacity: 0.7;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+form input {
+  width: 80%;
+  padding: 8px 12px;
+  border-radius: 2px;
+  font-size: 18px;
+  font-family: 'Petrona';
+  border: 1px solid #222;
+  outline: none;
+}
+
+.word-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.word-list li {
+  display: inline;
+  cursor: pointer;
+}
+.word-list li:hover {
+  text-decoration: underline;
+  color: #aa2222;
+
+}
+.word-list li::after {
+  content: ',';
+}
+.word-list li:last-child::after {
+  content: '';
+}
+
+#current-words {
+  border-bottom: 1px solid #999;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+#current-words:empty {
+  border-bottom: 0px;
+}
+
