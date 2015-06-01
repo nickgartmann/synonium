@@ -1,57 +1,30 @@
-var THESAURUS_URL = 'thesaurus.json';
-
-function loadThesaurus(callback) {
-  // Raw JS request borrowed from:
-  // http://code.tutsplus.com/articles/how-to-make-ajax-requests-with-raw-javascript--net-4855
-  var xhr;
-  if(typeof XMLHttpRequest !== 'undefined') xhr = new XMLHttpRequest();
-  else {
-    var versions = [
-      "MSXML2.XmlHttp.5.0", 
-      "MSXML2.XmlHttp.4.0",
-      "MSXML2.XmlHttp.3.0", 
-      "MSXML2.XmlHttp.2.0",
-      "Microsoft.XmlHttp"
-    ];
-
-    for(var i = 0, len = versions.length; i < len; i++) {
-      try {
-        xhr = new ActiveXObject(versions[i]);
-        break;
-      }
-      catch(e){}
-    } 
-  }
-
-  xhr.onreadystatechange = ensureReadiness;
-
-  function ensureReadiness() {
-    if(xhr.readyState < 4) {
-      return;
-    }
-    if(xhr.status !== 200) {
-      return;
-    }
-    if(xhr.readyState === 4) {
-      callback(JSON.parse(xhr.responseText));
-    }
-  }
-
-  xhr.open('GET', THESAURUS_URL, true);
-  xhr.send('');
-}
-
 function renderWordListToElement(element, words) {
   element.innerHTML = _.map(words || [], function(word) {
     return "<li>" + word + "</li>";
   }).join("\n"); 
 }
 
-function findSynonymsFor(words, thesaurus) {
-  var synonyms = _.map(words,function(word) {
-    return thesaurus[word];
+function findSynonymsForSingle(word){
+  var p = new promise.Promise();
+  promise.get("https://wordsapiv1.p.mashape.com/words/" + word + "/synonyms", null, {
+    'X-Mashape-Key': 'nDCTlklHHGmshYT0XSVDPZq6yiNyp1NfjmRjsnE90WIuXcOkqG',
+    'Accept': 'application/json'
+  }).then(function(error, response) {
+    if(error) {
+      p.done([]);
+    } else {
+      p.done(JSON.parse(response)['synonyms']);
+    }
   });
-  return _.intersection.apply(this, synonyms);
+  return p;
+}
+
+function findSynonymsFor(words) {
+  var p = new promise.Promise();
+  promise.join(_.map(words, findSynonymsForSingle)).then(function(results) {
+    p.done(_.intersection.apply(this, _.flatten(results, true)));
+  });
+  return p;
 }
 
 function applyOnClick(elements, callback) {
@@ -60,11 +33,6 @@ function applyOnClick(elements, callback) {
       callback.apply(element,[element.innerText]); });
   });
 }
-
-var thesaurus = null;
-loadThesaurus(function(th) {
-  thesaurus = th;
-});
 
 document.addEventListener('DOMContentLoaded', function() {
   var formElement  = document.getElementById('search');
@@ -76,25 +44,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function renderWords() {
     renderWordListToElement(currentWordsList, currentWords);
-    var synonyms = findSynonymsFor(currentWords, thesaurus);
-    renderWordListToElement(currentSynonymsList, synonyms);
+    findSynonymsFor(currentWords).then(function(synonyms) {
+      renderWordListToElement(currentSynonymsList, synonyms);
 
-    if(synonyms.length === 0 && currentWords.length !== 0) {
-      currentSynonymsList.innerHTML = "No synonyms found.";
-    }
+      if(synonyms.length === 0 && currentWords.length !== 0) {
+        currentSynonymsList.innerHTML = "No synonyms found.";
+      }
 
-    applyOnClick(currentWordsList.children, function(text) {
-      currentWords = _.without(currentWords, text);
-      renderWords();
+      applyOnClick(currentWordsList.children, function(text) {
+        currentWords = _.without(currentWords, text);
+        renderWords();
+      });
+
+      applyOnClick(currentSynonymsList.children, function(text) {
+        currentWords.push(text);
+        renderWords();
+      });
     });
+  }
 
-    applyOnClick(currentSynonymsList.children, function(text) {
-      currentWords.push(text);
-      renderWords();
-    });
- }
-
-  search.addEventListener('submit', function(event) {
+  formElement.addEventListener('submit', function(event) {
     event.preventDefault();
     var value = inputElement.value;
     currentWords.push(value.replace(/\s/g,''));
@@ -103,4 +72,4 @@ document.addEventListener('DOMContentLoaded', function() {
     return false;
   });
 
- });
+});
